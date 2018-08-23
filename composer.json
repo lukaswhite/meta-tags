@@ -1,0 +1,25 @@
+{
+    "name": "lukaswhite/meta-tags",
+    "description": "A PHP class for managing meta tags",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lukas White",
+            "email": "hello@lukaswhite.com"
+        }
+    ],
+    "require": {
+        "lukaswhite/html-element": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "7.0",
+        "phpunit/php-code-coverage": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lukaswhite\\MetaTags\\": "src/",
+            "Lukaswhite\\MetaTags\\Tests\\": "tests/"
+        }
+    }
+}
