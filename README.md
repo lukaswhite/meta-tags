@@ -178,20 +178,6 @@ This will output the following:
 
 ```html
 <meta name="url" content="http://example.com" />
-<meta property="og:url" content="http://example.com" />
-```
-
-You'll notice that it's added an Open Graph tag with the URL by default; if you don't want that behavior:
-
-```php
-$meta->includeOpenGraph( false )
-	->url( 'http://example.com' );
-```
-
-The result:
-
-```html
-<meta name="url" content="http://example.com" />
 ```
 
 ## Setting the Character Set
@@ -480,6 +466,14 @@ To set the locale, for example for localization [with Facebook](https://develope
 
 ```php
 $meta->locale( 'en_GB' );
+```
+
+### Setting the URL
+
+To set the Open Graph URL &mdash; in other words, `og:url` &mdash; simply do this:
+
+```php
+$meta->ogUrl( 'https://example.com' );
 ```
 
 ### Other Open Graph Tags

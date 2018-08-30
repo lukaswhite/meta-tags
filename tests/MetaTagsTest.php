@@ -151,6 +151,13 @@ class MetaTagsTest extends TestCase
             )
         );
 
+    }
+
+    public function testOgUrl( )
+    {
+        $meta = new MetaTags( );
+        $meta->ogUrl( 'http://example.com' );
+
         $this->assertTrue(
             $this->hasMetaTag(
                 $meta->render( ),
@@ -497,6 +504,16 @@ class MetaTagsTest extends TestCase
             )
         );
 
+    }
+
+    public function testCanonicalCanBeOverwritten( )
+    {
+        $meta = new MetaTags( );
+        $meta->canonical( 'http://example.com' );
+        $meta->canonical( 'http://elpmaxe.com' );
+        $tags = $this->getContentOfMultipleLinkTags( $meta->render( ), 'canonical' );
+        $this->assertEquals( 1, count( $tags ) );
+        $this->assertEquals( 'http://elpmaxe.com', $tags[ 0 ] );
     }
 
     public function testPagination( )

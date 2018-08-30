@@ -673,9 +673,18 @@ class MetaTags
      */
     public function url( $url )
     {
-        $this->set( 'url', $url );
-        $this->openGraph( 'url', $url );
-        return $this;
+        return $this->set( 'url', $url );
+    }
+
+    /**
+     * Set the Open Graph URL
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function ogUrl( $url )
+    {
+        return $this->openGraph( 'url', $url );
     }
 
     /**

@@ -69,13 +69,6 @@ class TestCase extends \PHPUnit\Framework\TestCase {
             $arr[ ] = $el->getAttribute( 'content' );
         }
         return $arr;
-        return array_map(
-            function( $el ) {
-                return $el->getAttribute( 'content' );
-            },
-            $entries
-        );
-        //return $entries->item( 0 )->getAttribute('content' );
     }
 
     protected function hasLinkWithRel( $html, $rel )
@@ -96,6 +89,20 @@ class TestCase extends \PHPUnit\Framework\TestCase {
         $query = sprintf( '//link[@rel="%s"]', $rel );
         $entries = $xpath->query($query);
         return $entries->item( 0 )->getAttribute('href' );
+    }
+
+    protected function getContentOfMultipleLinkTags( $html, $rel )
+    {
+        $doc = new \DOMDocument( );
+        $doc->loadHTML( $html );
+        $xpath = new \DOMXPath($doc);
+        $query = sprintf( '//link[@rel="%s"]', $rel );
+        $entries = $xpath->query($query);
+        $arr = [ ];
+        foreach( $entries as $el ) {
+            $arr[ ] = $el->getAttribute( 'href' );
+        }
+        return $arr;
     }
 
     protected function strContains( $haystack, $needle )
