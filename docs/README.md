@@ -99,7 +99,6 @@ Then, whenever you want to set your meta tags, for example in a controller, then
 $meta = app( )->make( MetaTags::class );
 ```
 
-
 ## Standard Metadata
 
 ### Setting the Title
@@ -176,20 +175,6 @@ $meta->url( 'http://example.com' );
 ```
 
 This will output the following:
-
-```html
-<meta name="url" content="http://example.com" />
-<meta property="og:url" content="http://example.com" />
-```
-
-You'll notice that it's added an Open Graph tag with the URL by default; if you don't want that behavior:
-
-```php
-$meta->includeOpenGraph( false )
-	->url( 'http://example.com' );
-```
-
-The result:
 
 ```html
 <meta name="url" content="http://example.com" />
@@ -420,7 +405,7 @@ You'll get the following:
 <meta name="description" content="A description of the website" />
 <meta property="og:description" content="A description of the website" />
 <meta name="url" content="http://example.com" />
-<meta property="og:url" content="http://example.com" />
+
 ```
 
 ### Defining the Type
@@ -481,6 +466,14 @@ To set the locale, for example for localization [with Facebook](https://develope
 
 ```php
 $meta->locale( 'en_GB' );
+```
+
+### Setting the URL
+
+To set the Open Graph URL &mdash; in other words, `og:url` &mdash; simply do this:
+
+```php
+$meta->ogUrl( 'https://example.com' );
 ```
 
 ### Other Open Graph Tags
@@ -986,6 +979,25 @@ The result will be along these lines:
 ```
 
 Should you want even more control over the output, or want to make any modifications, then you can call the `build( )` method, which will return an array of `HtmlElement` instances. The documentation for that [is here](https://github.com/lukaswhite/html-element).
+
+## Geo Tags
+
+You can also add geotags:
+
+```php
+$meta->geoPosition( new Geopoint( 37.416343, -122.153013 ) )
+	->geoPlaceName( 'London' )
+	->geoRegion( 'GB' );
+```
+
+The result:
+
+```html
+<meta name="geo.position" content="37.416343, -122.153013" />
+<meta name="ICBM" content="37.416343, -122.153013" />
+<meta name="geo.placename" content="London" />
+<meta name="geo.region" content="GB" />	
+```
 
 ## Adding Additional Meta Tags
 

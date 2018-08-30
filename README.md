@@ -405,7 +405,7 @@ You'll get the following:
 <meta name="description" content="A description of the website" />
 <meta property="og:description" content="A description of the website" />
 <meta name="url" content="http://example.com" />
-<meta property="og:url" content="http://example.com" />
+
 ```
 
 ### Defining the Type
