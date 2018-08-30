@@ -1154,6 +1154,11 @@ class MetaTags
             }
         } else {
 
+            // If the value is empty, don't add it
+            if ( empty( $value ) ) {
+                return $this;
+            }
+            
             if ( is_a( $value, 'DateTime' ) ) {
                 $value = ( string ) $value->format( \DateTime::ISO8601 );
             }

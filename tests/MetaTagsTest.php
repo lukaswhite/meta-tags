@@ -885,6 +885,22 @@ class MetaTagsTest extends TestCase
         );
     }
 
+    public function testSettingOpenGraphWithEmptyString( )
+    {
+        $meta = new MetaTags( );
+        $meta->openGraph(
+            'email',
+            ''
+        );
+
+        $this->assertFalse(
+            $this->hasMetaTag(
+                $meta->render( ),
+                'og:email'
+            )
+        );
+    }
+
     public function testSettingLocale( )
     {
         $meta = new MetaTags( );
