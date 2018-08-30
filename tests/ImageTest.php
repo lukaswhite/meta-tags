@@ -111,6 +111,12 @@ class ImageTest extends TestCase
             )
         );
 
+        $this->assertTrue( is_array( $meta->getImages( ) ) );
+        $this->assertEquals( 1, count( $meta->getImages( ) ) );
+        $this->assertInstanceOf( \Lukaswhite\MetaTags\Contracts\Image::class, $meta->getImages( )[ 0 ] );
+        $this->assertEquals( 'http://example.com/image.jpeg', $meta->getImages( )[ 0 ]->getUrl( ) );
+        $this->assertTrue( $meta->hasImages( ) );
+
 
     }
 

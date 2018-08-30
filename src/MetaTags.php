@@ -167,6 +167,27 @@ class MetaTags
     protected $links = [ ];
 
     /**
+     * Any images
+     *
+     * @var array
+     */
+    protected $images = [ ];
+
+    /**
+     * Any videos
+     *
+     * @var array
+     */
+    protected $videos = [ ];
+
+    /**
+     * Any audio
+     *
+     * @var array
+     */
+    protected $audio = [ ];
+
+    /**
      * Directions for the Google Bot
      *
      * @var array
@@ -438,17 +459,18 @@ class MetaTags
             $output[ ] = new HtmlElement( 'title', $this->tags[ 'general' ][ 'title' ][ 'value' ] );
         }
 
-        // Render standard description tag
-        if ($tag = $this->get('description')) {
-
-            $output[ ] = ( new HtmlElement( 'meta' ) )
-                ->set( 'name', 'description' )
-                ->set( 'content',
-                    $this->truncate(
-                        $tag[ 'value' ],
-                        $this->config('truncate.description' )
-                    )
-                );
+        // Go through the "basic" tags, where the meta tag uses the name attribute rather
+        // than property; for example keywords, description
+        foreach( $this->config[ 'basic' ] as $name ) {
+            if ( $tag = $this->get( $name ) ) {
+                if ( $limit = $this->config("truncate.{$name}" ) ) {
+                    $tag[ 'value' ] = $this->truncate( $tag[ 'value' ], $limit );
+                }
+                $output[] = (new HtmlElement('meta'))->set([
+                    'name'      => $name,
+                    'content'   => $tag[ 'value' ]
+                ] );
+            }
         }
 
         // Optionally add the schema.org tags for Google
@@ -469,17 +491,6 @@ class MetaTags
                         'content' => $tag['value']
                     ] );
                 }
-            }
-        }
-
-        // Go through the "basic" tags, where the meta tag uses the name attribute rather
-        // than property; for example keywords, description
-        foreach( $this->config[ 'basic' ] as $name ) {
-            if ( $tag = $this->get($name ) ) {
-                $output[] = (new HtmlElement('meta'))->set([
-                    'name'      => $name,
-                    'content'   => $tag[ 'value' ]
-                ] );
             }
         }
 
@@ -1379,7 +1390,31 @@ class MetaTags
         $this->openGraph( 'image:width',        $image->getWidth( ) );
         $this->openGraph( 'image:height',       $image->getHeight( ) );
         $this->openGraph( 'image:alt',          $image->getAlt( ) );
+        $this->images[ ] = $image;
         return $this;
+    }
+
+    /**
+     * Get the images that have previously been added.
+     *
+     * @return array
+     */
+    public function getImages( )
+    {
+        return $this->images;
+    }
+
+    /**
+     * Determine whether any images have been added.
+     *
+     * This might be useful if you need to ensure that a fallback image is always included
+     * before rendering a page.
+     *
+     * @return bool
+     */
+    public function hasImages( )
+    {
+        return ( count( $this->images ) > 0 );
     }
 
     /**
@@ -1396,6 +1431,7 @@ class MetaTags
         $this->openGraph( 'video:width',        $video->getWidth( ) );
         $this->openGraph( 'video:height',       $video->getHeight( ) );
         $this->openGraph( 'video:image',        $video->getImage( ) );
+        $this->videos[ ] = $video;
         return $this;
     }
 
@@ -1410,6 +1446,7 @@ class MetaTags
         $this->openGraph( 'audio',              $audio->getUrl( ) );
         $this->openGraph( 'audio:secure_url',   $audio->getSecureUrl( ) );
         $this->openGraph( 'audio:type',         $audio->getType( ) );
+        $this->audio[ ] = $audio;
         return $this;
     }
 
