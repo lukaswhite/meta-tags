@@ -1563,6 +1563,83 @@ class MetaTagsTest extends TestCase
         );
     }
 
+    public function testGeo( )
+    {
+        $meta = new MetaTags( );
+        $meta->geoPosition( new Geopoint( 37.416343, -122.153013 ) )
+            ->geoPlaceName( 'London' )
+            ->geoRegion( 'GB' );
+
+        $this->assertTrue(
+            $this->hasMetaTag(
+                $meta->render( ),
+                'geo.position',
+                'name'
+            )
+        );
+
+        $this->assertEquals(
+            '37.416343, -122.153013',
+            $this->getContentOfMetaTag(
+                $meta->render( ),
+                'geo.position',
+                'name'
+            )
+        );
+
+        $this->assertTrue(
+            $this->hasMetaTag(
+                $meta->render( ),
+                'ICBM',
+                'name'
+            )
+        );
+
+        $this->assertEquals(
+            '37.416343, -122.153013',
+            $this->getContentOfMetaTag(
+                $meta->render( ),
+                'ICBM',
+                'name'
+            )
+        );
+
+        $this->assertTrue(
+            $this->hasMetaTag(
+                $meta->render( ),
+                'geo.placename',
+                'name'
+            )
+        );
+
+        $this->assertEquals(
+            'London',
+            $this->getContentOfMetaTag(
+                $meta->render( ),
+                'geo.placename',
+                'name'
+            )
+        );
+
+
+        $this->assertTrue(
+            $this->hasMetaTag(
+                $meta->render( ),
+                'geo.region',
+                'name'
+            )
+        );
+
+        $this->assertEquals(
+            'GB',
+            $this->getContentOfMetaTag(
+                $meta->render( ),
+                'geo.region',
+                'name'
+            )
+        );
+    }
+
     public function __testSettingFacebookPageId( )
     {
         $meta = new MetaTags();

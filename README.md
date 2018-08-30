@@ -980,6 +980,25 @@ The result will be along these lines:
 
 Should you want even more control over the output, or want to make any modifications, then you can call the `build( )` method, which will return an array of `HtmlElement` instances. The documentation for that [is here](https://github.com/lukaswhite/html-element).
 
+## Geo Tags
+
+You can also add geotags:
+
+```php
+$meta->geoPosition( new Geopoint( 37.416343, -122.153013 ) )
+	->geoPlaceName( 'London' )
+	->geoRegion( 'GB' );
+```
+
+The result:
+
+```html
+<meta name="geo.position" content="37.416343, -122.153013" />
+<meta name="ICBM" content="37.416343, -122.153013" />
+<meta name="geo.placename" content="London" />
+<meta name="geo.region" content="GB" />	
+```
+
 ## Adding Additional Meta Tags
 
 It's worth pointing out that you don't necessarily need to add all of your meta tags to your site using this library; indeed arguably there are some that you shouldn't.

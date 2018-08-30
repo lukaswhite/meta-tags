@@ -113,6 +113,7 @@ class MetaTags
             ],
         ],
         'twitter'   => [ ],
+        'geo'       => [ ],
         'other'     => [ ],
     ];
 
@@ -536,6 +537,14 @@ class MetaTags
                     'content'   =>  $tag[ 'value' ],
                 ] );
             }
+        }
+
+        // Render any geo points
+        foreach ( $this->tags[ 'geo' ] as $name => $tag ) {
+            $output[] = ( new HtmlElement( 'meta' ) )->set( [
+                'name'      =>  $name == 'ICBM' ? $name : sprintf( 'geo.%s', $name ),
+                'content'   =>  $tag[ 'value' ],
+            ] );
         }
 
         // Render the Googlebot meta tag, if required
@@ -1158,7 +1167,7 @@ class MetaTags
             if ( empty( $value ) ) {
                 return $this;
             }
-            
+
             if ( is_a( $value, 'DateTime' ) ) {
                 $value = ( string ) $value->format( \DateTime::ISO8601 );
             }
@@ -1539,6 +1548,77 @@ class MetaTags
     public function facebookAdmins( ...$admins )
     {
         return $this->custom( 'fb:admins', implode( ', ', $admins ), 'property' );
+    }
+
+    /**
+     * Set the geo position
+     *
+     * @param Geopoint $point
+     * @return MetaTags
+     */
+    public function geoPosition( Geopoint $point )
+    {
+        $value = sprintf(
+            '%s, %s',
+            $point->getLatitude( ),
+            $point->getLongitude( )
+        );
+
+        $this->set(
+            'position',
+            $value,
+            [
+
+            ],
+            'geo'
+        );
+
+        $this->set(
+            'ICBM',
+            $value,
+            [
+
+            ],
+            'geo'
+        );
+
+        return $this;
+    }
+
+    /**
+     * Set the geo place name
+     *
+     * @param string $name
+     * @return MetaTags
+     */
+    public function geoPlaceName( $name )
+    {
+        return $this->set(
+            'placename',
+            $name,
+            [
+
+            ],
+            'geo'
+        );
+    }
+
+    /**
+     * Set the geo region
+     *
+     * @param string $region
+     * @return MetaTags
+     */
+    public function geoRegion( $region )
+    {
+        return $this->set(
+            'region',
+            $region,
+            [
+
+            ],
+            'geo'
+        );
     }
 
     /**
