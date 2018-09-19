@@ -486,6 +486,8 @@ $meta->openGraph( 'updated_time', new \DateTime( '2018-10-12' ) );
 $meta->openGraph( 'restrictions:age', 18 );
 ```
 
+Should you be setting an Open Graph tag that can appear multiple times, pass `true` as the third argument. This essentially allows you to "overwrite" Open Graph tags; which might useful if, for example, you need to override information somewhere in your application.
+
 ### Images
 
 Images are important for social networks, for example when your site is shared via Facebook, or used as the basis of a Twitter Card (more on those later).

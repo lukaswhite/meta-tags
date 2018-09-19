@@ -1677,6 +1677,22 @@ class MetaTagsTest extends TestCase
         );
     }
 
+    public function testOpenGraphTagsAreReplacedNotDuplicated( )
+    {
+        $meta = new MetaTags( );
+        $meta->title( 'Title One' );
+        $meta->title( 'Title Two' );
+        $meta->description( 'Desc One' );
+        $meta->description( 'Desc Two' );
+
+        $this->assertTrue( $this->hasMetaTag( $meta->render( ), 'og:title' ) );
+        $this->assertEquals( 'Title Two',
+            $this->getContentOfMetaTag( $meta->render( ), 'og:title' ) );
+        $this->assertTrue( $this->hasMetaTag( $meta->render( ), 'og:description' ) );
+        $this->assertEquals( 'Desc Two',
+            $this->getContentOfMetaTag( $meta->render( ), 'og:description' ) );
+    }
+
     //private function hasMetaTag( $html )
 
 }

@@ -1162,11 +1162,17 @@ class MetaTags
     /**
      * Set one or more Open Graph tags.
      *
+     * Note that by default, tags are thought to need to be unique (e.g. og:title), but
+     * some - like images - are not. What this is essentially means is that if you set
+     * the value of a tag like og:title a second time, it'll overwrite it rather than
+     * add a second value.
+     *
      * @param string|array $name
      * @param mixed $value
+     * @param bool $unique
      * @return $this
      */
-    public function openGraph( $name, $value = null )
+    public function openGraph( $name, $value = null, $unique = true )
     {
         if ( is_array( $name ) ) {
             foreach( $name as $key => $value ) {
@@ -1184,12 +1190,51 @@ class MetaTags
             }
 
             $this->set( $name, $value );
-            $this->ogTags[ ] = [
-                'name'      =>  $name,
-                'value'     =>  $value,
-            ];
+
+            if ( $unique && $this->getOpenGraphTag( $name ) ) {
+
+                $this->replaceOpenGraphTag( $name, $value );
+
+            } else {
+                $this->ogTags[ ] = [
+                    'name'      =>  $name,
+                    'value'     =>  $value,
+                ];
+            }
+
         }
         return $this;
+    }
+
+    /**
+     * Get an Open Graph tag by name
+     *
+     * @param string $name
+     * @return bool|mixed
+     */
+    protected function getOpenGraphTag( $name )
+    {
+        foreach( $this->ogTags as $tag ) {
+            if ( $tag[ 'name' ] === $name ) {
+                return $tag;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Replace an existing Open Graph tag
+     *
+     * @param string $name
+     * @param null $value
+     */
+    protected function replaceOpenGraphTag( $name, $value = null )
+    {
+        foreach( $this->ogTags as & $tag ) {
+            if ( $tag[ 'name' ] === $name ) {
+                $tag[ 'value' ] = $value;
+            }
+        }
     }
 
     /**
@@ -1370,9 +1415,9 @@ class MetaTags
      */
     public function addBusinessHoursForDay( BusinessDay $businessDay )
     {
-        $this->openGraph( 'business:hours:day',     $businessDay->getDay( ) );
-        $this->openGraph( 'business:hours:start',   $businessDay->getStart( ) );
-        $this->openGraph( 'business:hours:end',     $businessDay->getEnd( ) );
+        $this->openGraph( 'business:hours:day',     $businessDay->getDay( ), false );
+        $this->openGraph( 'business:hours:start',   $businessDay->getStart( ), false );
+        $this->openGraph( 'business:hours:end',     $businessDay->getEnd( ), false );
         return $this;
     }
 
@@ -1384,12 +1429,12 @@ class MetaTags
      */
     public function addImage( Image $image )
     {
-        $this->openGraph( 'image',              $image->getUrl( ) );
-        $this->openGraph( 'image:secure_url',   $image->getSecureUrl( ) );
-        $this->openGraph( 'image:type',         $image->getType( ) );
-        $this->openGraph( 'image:width',        $image->getWidth( ) );
-        $this->openGraph( 'image:height',       $image->getHeight( ) );
-        $this->openGraph( 'image:alt',          $image->getAlt( ) );
+        $this->openGraph( 'image',              $image->getUrl( ), false );
+        $this->openGraph( 'image:secure_url',   $image->getSecureUrl( ), false );
+        $this->openGraph( 'image:type',         $image->getType( ), false );
+        $this->openGraph( 'image:width',        $image->getWidth( ), false );
+        $this->openGraph( 'image:height',       $image->getHeight( ), false );
+        $this->openGraph( 'image:alt',          $image->getAlt( ), false );
         $this->images[ ] = $image;
         return $this;
     }
@@ -1425,12 +1470,12 @@ class MetaTags
      */
     public function addVideo( Video $video )
     {
-        $this->openGraph( 'video',              $video->getUrl( ) );
-        $this->openGraph( 'video:secure_url',   $video->getSecureUrl( ) );
-        $this->openGraph( 'video:type',         $video->getType( ) );
-        $this->openGraph( 'video:width',        $video->getWidth( ) );
-        $this->openGraph( 'video:height',       $video->getHeight( ) );
-        $this->openGraph( 'video:image',        $video->getImage( ) );
+        $this->openGraph( 'video',              $video->getUrl( ), false );
+        $this->openGraph( 'video:secure_url',   $video->getSecureUrl( ), false );
+        $this->openGraph( 'video:type',         $video->getType( ), false );
+        $this->openGraph( 'video:width',        $video->getWidth( ), false );
+        $this->openGraph( 'video:height',       $video->getHeight( ), false );
+        $this->openGraph( 'video:image',        $video->getImage( ), false );
         $this->videos[ ] = $video;
         return $this;
     }
@@ -1461,30 +1506,33 @@ class MetaTags
         if ( $article->getPublishedTime( ) ) {
             $this->openGraph(
                 'article:published_time',
-                $article->getPublishedTime( )->format( DateTime::ATOM )
+                $article->getPublishedTime( )->format( DateTime::ATOM ),
+                false
             );
         }
         if ( $article->getModifiedTime( ) ) {
             $this->openGraph(
                 'article:modified_time',
-                $article->getModifiedTime( )->format( DateTime::ATOM )
+                $article->getModifiedTime( )->format( DateTime::ATOM ),
+                false
             );
         }
         if ( $article->getExpirationTime( ) ) {
             $this->openGraph(
                 'article:expiration_time',
-                $article->getExpirationTime( )->format( DateTime::ATOM )
+                $article->getExpirationTime( )->format( DateTime::ATOM ),
+                false
             );
         }
         if ( $article->getAuthor( ) && count( $article->getAuthor( ) ) ) {
             foreach( $article->getAuthor( ) as $author ) {
-                $this->openGraph( 'article:author', $author );
+                $this->openGraph( 'article:author', $author, false );
             }
         }
         $this->openGraph( 'article:section', $article->getSection( ) );
         if ( $article->getTag( ) && count( $article->getTag( ) ) ) {
             foreach( $article->getTag( ) as $tag ) {
-                $this->openGraph( 'article:tag', $tag );
+                $this->openGraph( 'article:tag', $tag, false );
             }
         }
         return $this;
