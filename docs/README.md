@@ -1,5 +1,3 @@
-# Meta Tags
-
 This library helps you manage meta tags (including Open Graph) for your website or web application.
 
 Chances are, many of your meta tags are generated programmatically, for example from a database. Most notably the page title, but perhaps also the description and keywords.
@@ -316,6 +314,57 @@ To request that Google stop crawling a page after a specified date:
 ```php
 $meta->googleShouldStopCrawlingAfter( new \DateTime( '2019-10-23' ) );
 ```
+
+## Performance-related Meta Tags
+
+There are a number of meta tags that are performance-related; specifically things like pre-fetching and pre-rendering.
+
+### Pre-fetching
+
+You can add a link to the meta tags to tell the browser to pre-fetch a resource:
+
+```php
+$meta->addPrefetchLink( '/scripts.js' );
+```
+
+You can also add a hint as to the type of resource:
+
+```php
+$meta->addPrefetchLink( '/scripts.js', 'script' );
+```
+
+### Preloading
+
+You can add a link to the meta tags to tell the browser to preload a resource:
+
+```php
+$meta->addPreloadLink( '/scripts.js' );
+```
+
+You can also add a hint as to the type of resource:
+
+```php
+$meta->addPreloadLink( '/scripts.js', 'script' );
+```
+
+### DNS Pre-fetching
+
+> DNS pre-fetching is the process of initiating the dns resolution of each domain where we have hosted resources, before the browser makes a request for them, with the goal to save the DNS resolution time when the resource is requested. ([source](https://medium.com/@luisvieira_gmr/html5-prefetch-1e54f6dda15d))
+
+To do so:
+
+```php
+$meta->addPreconnect( '//cdn.example.com' );
+```
+
+### Pre-renderng
+
+To ask the browser to pre-render content:
+
+```php
+$meta->addPrerender( '//example.com/landing-page.html' );
+```
+
 
 ## http-equiv Meta Tags
 
