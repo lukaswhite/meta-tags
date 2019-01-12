@@ -81,6 +81,15 @@ class TestCase extends \PHPUnit\Framework\TestCase {
         return count( $entries ) == 1;
     }
 
+    protected function getLinkWithRel( $html, $rel )
+    {
+        $doc = new \DOMDocument( );
+        $doc->loadHTML( $html );
+        $xpath = new \DOMXPath($doc);
+        $query = sprintf( '//link[@rel="%s"]', $rel );
+        return $xpath->query( $query )[ 0 ];
+    }
+
     protected function getContentOfLinkTag( $html, $rel )
     {
         $doc = new \DOMDocument( );

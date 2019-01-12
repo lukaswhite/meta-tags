@@ -722,6 +722,81 @@ class MetaTags
     }
 
     /**
+     * Add a pre-fetch link
+     *
+     * @param string $url
+     * @param string $as
+     * @param array $attributes
+     * @return $this
+     */
+    public function addPrefetchLink( $url, $as = null, $attributes = [ ] )
+    {
+        if ( $as ) {
+            $attributes += [ 'as' => $as ];
+        }
+
+        return $this->addLink(
+            $url,
+            'prefetch',
+            $attributes
+        );
+    }
+
+    /**
+     * Add a DNS-prefetch link
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function addDnsPrefetch( $url )
+    {
+        return $this->addLink( $url, 'dns-prefetch' );
+    }
+
+    /**
+     * Add a preload link
+     *
+     * @param string $url
+     * @param string $as
+     * @param array $attributes
+     * @return $this
+     */
+    public function addPreloadLink( $url, $as = null, $attributes = [ ] )
+    {
+        if ( $as ) {
+            $attributes += [ 'as' => $as ];
+        }
+
+        return $this->addLink(
+            $url,
+            'preload',
+            $attributes
+        );
+    }
+
+    /**
+     * Add a preconnect link
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function addPreconnect( $url )
+    {
+        return $this->addLink( $url, 'preconnect' );
+    }
+
+    /**
+     * Add a pre-render link
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function addPrerender( $url )
+    {
+        return $this->addLink( $url, 'prerender' );
+    }
+
+    /**
      * Set the canonical URL
      *
      * @param string $url

@@ -1693,6 +1693,71 @@ class MetaTagsTest extends TestCase
             $this->getContentOfMetaTag( $meta->render( ), 'og:description' ) );
     }
 
+    public function testAddingPrefetchLinks( )
+    {
+        $meta = new MetaTags( );
+        $meta->addPrefetchLink( '/scripts.js' );
+        $this->assertTrue( $this->hasLinkWithRel(  $meta->render( ), 'prefetch' ) );
+        $this->assertEquals( '/scripts.js', $this->getContentOfLinkTag( $meta->render( ), 'prefetch' ) );
+
+        unset( $meta );
+
+        $meta = new MetaTags( );
+        $meta->addPrefetchLink( '/scripts.js', 'script' );
+        $this->assertTrue( $this->hasLinkWithRel( $meta->render( ), 'prefetch' ) );
+        $this->assertEquals( '/scripts.js', $this->getContentOfLinkTag( $meta->render( ), 'prefetch' ) );
+        $el = $this->getLinkWithRel( $meta->render( ), 'prefetch' );
+        /** @var \DOMElement $el */
+        $this->assertNotNull( $el->getAttribute( 'as' ) );
+        $this->assertEquals( 'script', $el->getAttribute( 'as' ) );
+    }
+
+    public function testAddingPreloadLinks( )
+    {
+        $meta = new MetaTags( );
+        $meta->addPreloadLink( '/scripts.js' );
+        $this->assertTrue( $this->hasLinkWithRel(  $meta->render( ), 'preload' ) );
+        $this->assertEquals( '/scripts.js', $this->getContentOfLinkTag( $meta->render( ), 'preload' ) );
+
+        unset( $meta );
+
+        $meta = new MetaTags( );
+        $meta->addPreloadLink( '/scripts.js', 'script' );
+        $this->assertTrue( $this->hasLinkWithRel( $meta->render( ), 'preload' ) );
+        $this->assertEquals( '/scripts.js', $this->getContentOfLinkTag( $meta->render( ), 'preload' ) );
+        $el = $this->getLinkWithRel( $meta->render( ), 'preload' );
+        /** @var \DOMElement $el */
+        $this->assertNotNull( $el->getAttribute( 'as' ) );
+        $this->assertEquals( 'script', $el->getAttribute( 'as' ) );
+    }
+
+    public function testAddingDnsPrefetch( )
+    {
+        $meta = new MetaTags( );
+        $meta->addDnsPrefetch( '//example.com' );
+        $this->assertTrue( $this->hasLinkWithRel(  $meta->render( ), 'dns-prefetch' ) );
+        $this->assertEquals( '//example.com', $this->getContentOfLinkTag( $meta->render( ), 'dns-prefetch' ) );
+    }
+
+    public function testAddingPreconnect( )
+    {
+        $meta = new MetaTags( );
+        $meta->addPreconnect( '//example.com' );
+        $this->assertTrue( $this->hasLinkWithRel(  $meta->render( ), 'preconnect' ) );
+        $this->assertEquals( '//example.com', $this->getContentOfLinkTag( $meta->render( ), 'preconnect' ) );
+    }
+
+    public function testAddingPrerender( )
+    {
+        $meta = new MetaTags( );
+        $meta->addPrerender( '//example.com/landing-page.html' );
+        $this->assertTrue( $this->hasLinkWithRel(  $meta->render( ), 'prerender' ) );
+        $this->assertEquals(
+            '//example.com/landing-page.html',
+            $this->getContentOfLinkTag( $meta->render( ), 'prerender' )
+        );
+    }
+
     //private function hasMetaTag( $html )
 
 }
