@@ -1,5 +1,8 @@
 # Meta Tags
 
+![Run Tests](https://github.com/lukaswhite/meta-tags/workflows/Run%20Tests/badge.svg)
+[![codecov](https://codecov.io/gh/lukaswhite/meta-tags/branch/master/graph/badge.svg)](https://codecov.io/gh/lukaswhite/meta-tags)
+
 This library helps you manage meta tags (including Open Graph) for your website or web application.
 
 Chances are, many of your meta tags are generated programmatically, for example from a database. Most notably the page title, but perhaps also the description and keywords.
