@@ -21,5 +21,8 @@
             "Lukaswhite\\MetaTags\\": "src/",
             "Lukaswhite\\MetaTags\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }
